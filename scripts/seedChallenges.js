@@ -178,9 +178,6 @@ const challengesData = [
 
 async function seed() {
   const adminPassword = process.env.ADMIN_PASSWORD;
-  if (!adminPassword) {
-    throw new Error("ADMIN_PASSWORD must be set in .env.local before seeding the admin account.");
-  }
 
   console.log("Connecting to MongoDB...");
   await connectMongo(uri);
@@ -201,42 +198,48 @@ async function seed() {
     console.log(`Seeded Stage ${item.stageNumber}: ${item.title}`);
   }
 
-  // 2. Seed Admin User Account
-  const adminUsername = "admin";
-  const adminEmail = "admin@cybervault.local";
-  const adminPasswordHash = await bcrypt.hash(adminPassword, 12);
+  if (adminPassword) {
+    // 2. Seed Admin User Account
+    const adminUsername = "admin";
+    const adminEmail = "admin@cybervault.local";
+    const adminPasswordHash = await bcrypt.hash(adminPassword, 12);
 
-  let adminUser = await User.findOne({ username: adminUsername });
-  if (!adminUser) {
-    adminUser = await User.create({
-      username: adminUsername,
-      email: adminEmail,
-      passwordHash: adminPasswordHash,
-      role: "admin",
-      score: 0,
-      completedStages: [],
-      currentStage: 1,
-    });
-    console.log(`Created Admin User: ${adminUsername}`);
+    let adminUser = await User.findOne({ username: adminUsername });
+    if (!adminUser) {
+      adminUser = await User.create({
+        username: adminUsername,
+        email: adminEmail,
+        passwordHash: adminPasswordHash,
+        role: "admin",
+        score: 0,
+        completedStages: [],
+        currentStage: 1,
+      });
+      console.log(`Created Admin User: ${adminUsername}`);
+    } else {
+      adminUser.passwordHash = adminPasswordHash;
+      adminUser.role = "admin";
+      await adminUser.save();
+      console.log(`Updated Admin User credentials: ${adminUsername}`);
+    }
+
+    // 3. Ensure Admin Progress document exists
+    const adminProgress = await Progress.findOne({ userId: adminUser._id });
+    if (!adminProgress) {
+      await Progress.create({
+        userId: adminUser._id,
+        completedStages: [],
+        currentStage: 1,
+        score: 0,
+      });
+    }
+
+    console.log("Admin account seeded successfully.");
   } else {
-    adminUser.passwordHash = adminPasswordHash;
-    adminUser.role = "admin";
-    await adminUser.save();
-    console.log(`Updated Admin User credentials: ${adminUsername}`);
+    console.log("Skipped admin account seeding because ADMIN_PASSWORD is not set.");
   }
 
-  // 3. Ensure Admin Progress document exists
-  const adminProgress = await Progress.findOne({ userId: adminUser._id });
-  if (!adminProgress) {
-    await Progress.create({
-      userId: adminUser._id,
-      completedStages: [],
-      currentStage: 1,
-      score: 0,
-    });
-  }
-
-  console.log("All 6 challenges and Admin user seeded successfully!");
+  console.log("Challenge seeding complete.");
   await mongoose.disconnect();
 }
 

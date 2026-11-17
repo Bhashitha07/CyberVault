@@ -16,10 +16,10 @@ Create or update `.env.local` in the root directory:
 ```env
 MONGODB_URI=mongodb://127.0.0.1:27017/cybervault_ctf
 AUTH_SECRET=replace-with-a-long-random-secret-key
-ADMIN_PASSWORD=set-a-local-admin-password
+ADMIN_PASSWORD=optional-local-admin-password
 ```
 
-The seed scripts create the `admin` account with the password in `ADMIN_PASSWORD`. Keep this value in your untracked `.env.local`; the scripts do not provide a built-in admin password.
+`ADMIN_PASSWORD` is only needed to create or update the admin account. Keep it in your untracked `.env.local`; the project does not include a built-in admin password.
 
 *Note: For MongoDB Atlas, format your string as follows:*
 ```env
@@ -47,7 +47,7 @@ npm install
 ```
 
 ### 5. Seed Database Challenges
-Seed the 6 CTF stages into your MongoDB database:
+Seed the 6 CTF stages into your MongoDB database. This does not require `ADMIN_PASSWORD`:
 ```bash
 npm run seed
 ```
@@ -57,6 +57,14 @@ npm run seed
 npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) in your web browser.
+
+### 7. Create Accounts
+Create a player account from the **Create account** link. There is no built-in player password.
+
+To create or update the admin account, set `ADMIN_PASSWORD` in `.env.local` and run:
+```bash
+npm run seed:admin
+```
 
 ---
 
