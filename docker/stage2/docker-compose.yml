@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  stage2-lab:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: stage2-vulnerable-portal
+    ports:
+      - "127.0.0.1:3002:3002"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - ctf-internal-net
+
+networks:
+  ctf-internal-net:
+    driver: bridge

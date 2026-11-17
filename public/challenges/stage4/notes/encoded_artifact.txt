@@ -1,0 +1,4 @@
+--- INCIDENT EVIDENCE ARTIFACT #4092 ---
+Encoded Payload:
+RkxBRzogQ1Z7Zm9yZW5zaWNzX2ZpbmRzX3RoZV9jbHVlfQpTdGFnZSA1IFByb2dyZXNzaW9uIENsdWU6IEludmVzdGlnYXRlIG5ldHdvcmsgcGFja2V0IGNhcHR1cmUgZmlsZSBhdCAvY2hhbGxlbmdlcy9zdGFnZTUvY2hhbGxlbmdlLnBjYXA=
+----------------------------------------

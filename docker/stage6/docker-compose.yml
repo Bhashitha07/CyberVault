@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  stage6-lab:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: stage6-linux-capstone
+    security_opt:
+      - no-new-privileges:true
+    read_only: false
+    tmpfs:
+      - /tmp:rw,exec,nosuid
+    networks:
+      - ctf-internal-net
+
+networks:
+  ctf-internal-net:
+    driver: bridge
