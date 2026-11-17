@@ -177,6 +177,11 @@ const challengesData = [
 ];
 
 async function seed() {
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminPassword) {
+    throw new Error("ADMIN_PASSWORD must be set in .env.local before seeding the admin account.");
+  }
+
   console.log("Connecting to MongoDB...");
   await connectMongo(uri);
 
@@ -199,7 +204,6 @@ async function seed() {
   // 2. Seed Admin User Account
   const adminUsername = "admin";
   const adminEmail = "admin@cybervault.local";
-  const adminPassword = "AdminPassword123!";
   const adminPasswordHash = await bcrypt.hash(adminPassword, 12);
 
   let adminUser = await User.findOne({ username: adminUsername });

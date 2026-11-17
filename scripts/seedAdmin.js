@@ -5,7 +5,7 @@ const { connectMongo } = require("../src/lib/mongodb-connection.js");
 const uri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/cybervault_ctf";
 const adminUsername = process.env.ADMIN_USERNAME || "admin";
 const adminEmail = process.env.ADMIN_EMAIL || "admin@cybervault.local";
-const adminPassword = process.env.ADMIN_PASSWORD || "AdminPassword123!";
+const adminPassword = process.env.ADMIN_PASSWORD;
 
 const UserSchema = new mongoose.Schema(
   {
@@ -37,6 +37,10 @@ const User = mongoose.models.User || mongoose.model("User", UserSchema);
 const Progress = mongoose.models.Progress || mongoose.model("Progress", ProgressSchema);
 
 async function seedAdmin() {
+  if (!adminPassword) {
+    throw new Error("ADMIN_PASSWORD must be set in .env.local before seeding the admin account.");
+  }
+
   console.log("Connecting to MongoDB...");
   await connectMongo(uri);
 

@@ -16,7 +16,10 @@ Create or update `.env.local` in the root directory:
 ```env
 MONGODB_URI=mongodb://127.0.0.1:27017/cybervault_ctf
 AUTH_SECRET=replace-with-a-long-random-secret-key
+ADMIN_PASSWORD=set-a-local-admin-password
 ```
+
+The seed scripts create the `admin` account with the password in `ADMIN_PASSWORD`. Keep this value in your untracked `.env.local`; the scripts do not provide a built-in admin password.
 
 *Note: For MongoDB Atlas, format your string as follows:*
 ```env
